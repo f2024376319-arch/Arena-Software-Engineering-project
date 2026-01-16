@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User & League Management</title>
+<style>
+/* --- General Body --- */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+    min-height: 100vh;
+    color: #333;
+}
+
+/* --- Container --- */
+.container {
+    max-width: 500px;
+    margin: 50px auto;
+    background: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 15px 25px rgba(0,0,0,0.2);
+    animation: fadeIn 1s ease-in-out;
+}
+
+/* --- Fade-in animation --- */
+@keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(-20px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Headings --- */
+h1, h2 {
+    text-align: center;
+    color: #333;
+}
+
+h2 {
+    margin-top: 20px;
+    font-size: 22px;
+}
+
+/* --- Input fields --- */
+input, select {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+/* --- Buttons --- */
+button {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 8px;
+    background: #6a11cb;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #2575fc;
+}
+
+/* --- Message --- */
+#message {
+    text-align: center;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/* --- Users List --- */
+#usersList {
+    margin-top: 20px;
+    background: #f0f0f0;
+    padding: 15px;
+    border-radius: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+#usersList h3 {
+    margin-top: 0;
+    color: #6a11cb;
+}
+
+/* --- Card for sections --- */
+.section-card {
+    background: #fafafa;
+    padding: 20px;
+    margin: 15px 0;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* --- Footer --- */
+footer {
+    text-align: center;
+    margin-top: 30px;
+    color: #fff;
+    font-size: 14px;
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🏟 Arena Management</h1>
+
+    <!-- Registration Section -->
+    <div class="section-card">
+        <h2>📝 User Registration</h2>
+        <input type="text" id="username" placeholder="Enter Username">
+        <input type="password" id="password" placeholder="Enter Password">
+        <select id="role">
+            <option value="">Select Role</option>
+            <option value="Player">Player</option>
+            <option value="LeagueOwner">League Owner</option>
+            <option value="Advertiser">Advertiser</option>
+        </select>
+        <button onclick="registerUser()">Register</button>
+    </div>
+
+    <!-- Login Section -->
+    <div class="section-card">
+        <h2>🔑 Login</h2>
+        <input type="text" id="loginUsername" placeholder="Enter Username">
+        <input type="password" id="loginPassword" placeholder="Enter Password">
+        <button onclick="loginUser()">Login</button>
+    </div>
+
+    <!-- Message -->
+    <p id="message"></p>
+
+    <!-- Operator View Section -->
+    <div class="section-card">
+        <h3>👁️ Operator View (All Users)</h3>
+        <div id="usersList">
+            <p>No users registered yet.</p>
+        </div>
+    </div>
+</div>
+
+<footer>© 2026 Arena Project Demo</footer>
+
+<script>
+// --- Users storage (localStorage for demo) ---
+let users = JSON.parse(localStorage.getItem('users')) || [];
+
+function saveUsers() {
+    localStorage.setItem('users', JSON.stringify(users));
+}
+
+// Register new user
+function registerUser() {
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value.trim();
+    const role = document.getElementById('role').value;
+
+    if (!username || !password || !role) {
+        document.getElementById('message').innerText = "⚠️ Fill all fields!";
+        return;
+    }
+
+    if (users.some(u => u.username === username)) {
+        document.getElementById('message').innerText = "❌ Username already exists!";
+        return;
+    }
+
+    users.push({ username, password, role });
+    saveUsers();
+    document.getElementById('message').innerText = "✅ User registered successfully!";
+    document.getElementById('username').value = '';
+    document.getElementById('password').value = '';
+    document.getElementById('role').value = '';
+    showUsers();
+}
+
+// Login user
+function loginUser() {
+    const username = document.getElementById('loginUsername').value.trim();
+    const password = document.getElementById('loginPassword').value.trim();
+
+    const user = users.find(u => u.username === username && u.password === password);
+    if (user) {
+        document.getElementById('message').innerText = `✅ Login successful! Role: ${user.role}`;
+        showUsers();
+    } else {
+        document.getElementById('message').innerText = "❌ Login failed!";
+    }
+}
+
+// Show all users in Operator view
+function showUsers() {
+    const div = document.getElementById('usersList');
+    if (users.length === 0) {
+        div.innerHTML = "<p>No users registered yet.</p>";
+        return;
+    }
+    let html = "<ul>";
+    users.forEach(u => {
+        html += `<li>👤 ${u.username} - ${u.role}</li>`;
+    });
+    html += "</ul>";
+    div.innerHTML = html;
+}
+
+// Initialize view
+showUsers();
+</script>
+</body>
+</html>
