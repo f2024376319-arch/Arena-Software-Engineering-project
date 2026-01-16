@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ARENA - Hangman</title>
+<style>
+body{ font-family:Arial; background:#0f172a; color:white; display:flex; justify-content:center; align-items:center; height:100vh;}
+.container{ text-align:center; background:#1e293b; padding:25px; border-radius:10px; width:400px;}
+.status{ margin:10px 0; font-size:18px; color:#38bdf8;}
+.word{ letter-spacing:10px; font-size:28px; margin:15px 0;}
+.letters button{ margin:3px; padding:8px 12px; border:none; border-radius:5px; background:#38bdf8; cursor:pointer;}
+.letters button:disabled{ background:#475569; cursor:not-allowed;}
+.letters button.correct{ background:#22c55e !important; }
+.letters button.wrong{ background:#ef4444 !important; }
+.letters button:hover:not(:disabled){ background:#0ea5e9; }
+button.restart{ margin-top:10px; padding:8px 15px; font-size:16px; background:#38bdf8; border:none; border-radius:5px; cursor:pointer;}
+button.restart:hover{ background:#0ea5e9;}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>ARENA</h1>
+<h3>Hangman</h3>
+<div class="status" id="attempts">Attempts left: 6</div>
+<div class="word" id="word"></div>
+<div class="letters" id="letters"></div>
+<div class="status" id="status">Guess the word!</div>
+<button class="restart" onclick="reset()">Restart Game</button>
+</div>
+<script>
+const words=["JAVASCRIPT","PROGRAMMING","HANGMAN","ARENA","CODE"];
+let word="", display=[], attempts=6;
+function setupLetters(){
+    const lettersDiv=document.getElementById("letters");
+    lettersDiv.innerHTML="";
+    for(let i=65;i<=90;i++){
+        const btn=document.createElement("button");
+        btn.innerText=String.fromCharCode(i);
+        btn.onclick=()=>guess(btn);
+        lettersDiv.appendChild(btn);
+    }
+}
+function start(){
+    word=words[Math.floor(Math.random()*words.length)];
+    display=Array(word.length).fill("_");
+    attempts=6;
+    update();
+    setupLetters();
+}
+function guess(btn){
+    const letter=btn.innerText;
+    let correct=false;
+    for(let i=0;i<word.length;i++){ if(word[i]===letter){ display[i]=letter; correct=true; } }
+    if(correct) btn.classList.add("correct"); else { btn.classList.add("wrong"); attempts--; }
+    btn.disabled=true;
+    update();
+    if(!display.includes("_")) document.getElementById("status").innerText=`🎉 You guessed it! ${word}`;
+    if(attempts<=0) document.getElementById("status").innerText=`💀 Game Over! ${word}`;
+}
+function update(){
+    document.getElementById("word").innerText=display.join(" ");
+    document.getElementById("attempts").innerText=`Attempts left: ${attempts}`;
+}
+function reset(){ start(); }
+start();
+</script>
+</body>
+</html>

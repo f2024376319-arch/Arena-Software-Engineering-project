@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ARENA - Memory Card</title>
+<style>
+body{ font-family:Arial; background:#0f172a; color:white; display:flex; justify-content:center; align-items:center; height:100vh;}
+.container{ text-align:center; background:#1e293b; padding:25px; border-radius:10px; width:400px;}
+.memory-grid{ display:grid; grid-template-columns: repeat(4,80px); gap:5px; justify-content:center; margin-top:15px;}
+.memory-card{ width:80px; height:80px; background:#334155; font-size:28px; display:flex; justify-content:center; align-items:center; border-radius:5px; cursor:pointer;}
+.memory-card.matched{ background:#22c55e; color:white; cursor:default; }
+.status{ margin-top:15px; font-size:18px; color:#38bdf8; }
+button.restart{ margin-top:10px; padding:8px 15px; font-size:16px; background:#38bdf8; border:none; border-radius:5px; cursor:pointer;}
+button.restart:hover{ background:#0ea5e9;}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>ARENA</h1>
+<h3>Memory Card</h3>
+<div class="memory-grid" id="grid"></div>
+<div class="status" id="status">Find all matches!</div>
+<button class="restart" onclick="reset()">Restart</button>
+</div>
+<script>
+let values=[], grid=[], first=null, second=null, matched=0;
+function start(){
+    const symbols=["🍎","🍌","🍇","🍒","🍉","🥝","🍍","🍑"];
+    values=[...symbols,...symbols]; values.sort(()=>Math.random()-0.5);
+    const g=document.getElementById("grid"); g.innerHTML=""; grid=[]; first=null; second=null; matched=0;
+    for(let i=0;i<16;i++){
+        const card=document.createElement("button");
+        card.className="memory-card"; card.dataset.value=values[i]; card.innerText="";
+        card.onclick=()=>flip(card); g.appendChild(card); grid.push(card);
+    }
+    document.getElementById("status").innerText="Find all matches!";
+}
+function flip(card){
+    if(card===first || card.classList.contains("matched")) return;
+    card.innerText=card.dataset.value;
+    if(!first) first=card;
+    else{
+        second=card;
+        if(first.dataset.value===second.dataset.value){
+            first.classList.add("matched"); second.classList.add("matched"); matched+=2;
+            document.getElementById("status").innerText="Good! Keep going!";
+        } else {
+            setTimeout(()=>{ first.innerText=""; second.innerText=""; },500);
+            document.getElementById("status").innerText="Try again!";
+        }
+        first=null; second=null;
+    }
+    if(matched===16) document.getElementById("status").innerText="🎉 You matched all cards!";
+}
+function reset(){ start(); }
+start();
+</script>
+</body>
+</html>

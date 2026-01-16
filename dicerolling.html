@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ARENA - Dice Rolling</title>
+<style>
+body{ font-family:Arial; background:#0f172a; color:white; display:flex; justify-content:center; align-items:center; height:100vh;}
+.container{ text-align:center; background:#1e293b; padding:25px; border-radius:10px; width:300px;}
+.dice-container{ display:flex; justify-content:center; margin:15px 0;}
+.dice{ width:80px; height:80px; margin:0 10px; border-radius:10px; background:#334155; display:flex; justify-content:center; align-items:center; font-size:36px; color:#38bdf8;}
+button{ margin-top:15px; padding:10px 15px; border:none; border-radius:5px; background:#38bdf8; cursor:pointer;}
+button:hover{ background:#0ea5e9;}
+.status{ margin:10px 0; font-size:18px; color:#38bdf8;}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>ARENA</h1>
+<h3>Dice Rolling</h3>
+<div class="dice-container">
+<div class="dice" id="d1">🎲</div>
+<div class="dice" id="d2">🎲</div>
+</div>
+<div class="status" id="status">Click Roll to start!</div>
+<button onclick="roll()">Roll Dice</button>
+<div class="status" id="history">Last rolls:</div>
+</div>
+<script>
+let history=[];
+function getEmoji(n){ return ["⚀","⚁","⚂","⚃","⚄","⚅"][n-1]; }
+function roll(){
+    const d1=Math.floor(Math.random()*6)+1;
+    const d2=Math.floor(Math.random()*6)+1;
+    document.getElementById("d1").innerText=getEmoji(d1);
+    document.getElementById("d2").innerText=getEmoji(d2);
+    const total=d1+d2;
+    document.getElementById("status").innerText=`You rolled: ${d1} + ${d2} = ${total}`;
+    history.unshift(total);
+    if(history.length>5) history.pop();
+    document.getElementById("history").innerText="Last rolls: "+history.join(", ");
+}
+</script>
+</body>
+</html>

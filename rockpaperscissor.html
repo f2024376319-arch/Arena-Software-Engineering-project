@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ARENA - Rock Paper Scissors</title>
+<style>
+body{ font-family:Arial; background:#0f172a; color:white; display:flex; justify-content:center; align-items:center; height:100vh;}
+.container{ text-align:center; background:#1e293b; padding:25px; border-radius:10px; width:300px; }
+button{ margin:5px; padding:10px 15px; border:none; border-radius:5px; background:#38bdf8; cursor:pointer; font-size:16px;}
+button:hover{ background:#0ea5e9;}
+.status{ margin:15px 0; font-size:18px; color:#38bdf8;}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>ARENA</h1>
+<h3>Rock-Paper-Scissors</h3>
+<div class="status" id="status">Choose your move</div>
+<button onclick="play('Rock')">Rock</button>
+<button onclick="play('Paper')">Paper</button>
+<button onclick="play('Scissors')">Scissors</button>
+</div>
+<script>
+function play(user){
+    const moves=["Rock","Paper","Scissors"];
+    const comp=moves[Math.floor(Math.random()*3)];
+    let result="";
+    if(user===comp) result="It's a Draw!";
+    else if((user==="Rock"&&comp==="Scissors")||(user==="Paper"&&comp==="Rock")||(user==="Scissors"&&comp==="Paper")) result="You Win!";
+    else result="You Lose!";
+    document.getElementById("status").innerText=`You: ${user} | CPU: ${comp} → ${result}`;
+}
+</script>
+</body>
+</html>

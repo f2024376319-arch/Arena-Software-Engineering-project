@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ARENA - Number Guessing</title>
+<style>
+body{ font-family:Arial; background:#0f172a; color:white; display:flex; justify-content:center; align-items:center; height:100vh;}
+.container{ text-align:center; background:#1e293b; padding:25px; border-radius:10px; width:300px;}
+input{ padding:5px; width:60px; font-size:16px; border-radius:5px; border:none;}
+button{ margin-left:5px; padding:5px 10px; border:none; border-radius:5px; background:#38bdf8; cursor:pointer;}
+button:hover{ background:#0ea5e9;}
+.status{ margin:15px 0; font-size:18px; color:#38bdf8;}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>ARENA</h1>
+<h3>Number Guessing</h3>
+<div class="status" id="status">Guess a number between 1-100</div>
+<input type="number" id="guess" min="1" max="100">
+<button onclick="check()">Guess</button>
+<button onclick="resetGame()">Restart</button>
+</div>
+<script>
+let target=Math.floor(Math.random()*100)+1;
+function check(){
+    const val=parseInt(document.getElementById("guess").value);
+    if(val>target) document.getElementById("status").innerText="Too High!";
+    else if(val<target) document.getElementById("status").innerText="Too Low!";
+    else document.getElementById("status").innerText="🎉 Correct!";
+}
+function resetGame(){
+    target=Math.floor(Math.random()*100)+1;
+    document.getElementById("status").innerText="Guess a number between 1-100";
+    document.getElementById("guess").value="";
+}
+</script>
+</body>
+</html>
